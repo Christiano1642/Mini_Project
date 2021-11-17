@@ -24,8 +24,14 @@ router.get("/listings", async (req, res) =>{
     res.json(currentListings);
 })
 
-router.get("/listings/:id", async (req, res) => {
-    
+router.get("/review/:id", async (req, res) => {
+   const listingId = await client
+   .db(config.db.name)
+   .collection(config.db.collection)
+   .findOne({_id: req.params.id})
+   .toArray();
+
+   res.json(listingId);
 })
 
 export default router;
