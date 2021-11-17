@@ -1,7 +1,31 @@
 import Router from "express";
+import config from "./config.js";
+import client from "./db/client.js";
 
-const router = new Router();
 
-// TODO: Add routes here (maybe 🤔 start with a GET test route)
+
+const router = new Router ();
+
+router.get("/", (_, res) =>{
+    res.send("Hello from API");
+});
+
+router.get("/listings", async (req, res) =>{
+    const currentListings = await client
+    .db(config.db.name)
+    .collection(config.db.collection)
+    .find( {$or:[
+        {name: {$regex: (req.body.keywords? req.body.keywords: ""), $options: "i"}},
+        {description:{ $regex:(req.body.keywords? req.body.keywords: ""), $options: "i"}},
+    ]})
+    .limit(req.query.limit? req.query.limit: 0)
+    .toArray();
+
+    res.json(currentListings);
+})
+
+router.get("/listings/:id", async (req, res) => {
+    
+})
 
 export default router;
