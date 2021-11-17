@@ -1,19 +1,15 @@
-// Entry point for the application
 import express from "express";
 import config from "./config.js";
 import router from "./router.js";
-// TODO: Import the routes
 
 const app = express();
 
 app.get("/", (_, res) => {
-  res.send("Hello World");
+    res.send("Hello Express!");
 });
 
-// TODO: Use json middleware (if needed)
+app.use("/api", router);
 
-app.use("/api",router);
-
-app.listen(config.port, () => {
-  console.log(`Server 🏃🏾‍♂️ at: http://localhost:${config.port}`);
+app.listen(config.port, () =>{
+    console.info(`Server running: http://localhost:${config.port}`);
 });
