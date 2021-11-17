@@ -24,7 +24,7 @@ router.get("/listings", async (req, res) =>{
     res.json(currentListings);
 })
 
-router.get("/review/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
    const listingId = await client
    .db(config.db.name)
    .collection(config.db.collection)
@@ -32,6 +32,26 @@ router.get("/review/:id", async (req, res) => {
    .toArray();
 
    res.json(listingId);
+})
+
+router.get("/review/:id", async (req, res) => {
+    const review = await client
+    .db(config.db.name)
+    .collection(config.db.collection)
+    .findOne({_id: req.params.id})
+    
+    res.json(review.review);
+})
+
+router.post("/listing/:id", async (req, res) => {
+    const listing = await client
+    .db(config.db.name)
+    .collection(config.db.collection)
+    .updateOne(
+        {_id: req.params.id},
+        {$push:{reviews: req.body}})
+
+        res.json(listing);
 })
 
 export default router;
